@@ -30,6 +30,8 @@ int main()
     while (1)
     {
         n = sendto(sock, buf, strlen(buf), 0, (struct sockaddr *)&server, fromlen);
+        if (buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't')
+            break;
         if (n < 0)
             error("sendto");
         bzero(buf, 1024);
@@ -37,6 +39,9 @@ int main()
         if (n < 0)
             error("recvfrom");
         printf("Message received from server:%s\n", buf);
+        if (buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't')
+            break;
+        bzero(buf, 1024);
         fgets(buf, 1024, stdin);
     }
     return 0;
