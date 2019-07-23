@@ -27,13 +27,20 @@ int main()
     while (1)
     {
         n = recvfrom(sock, buf, 1024, 0, (struct sockaddr *)&client, &fromlen);
+
         if (n < 0)
             error("recvfrom");
         printf("Message received from client:%s\n", buf);
-        fgets(buf,1024,stdin);
-        n = sendto(sock,buf,1024,0,(struct sockaddr *)&client,fromlen);
-        if(n<0)
+        if (buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't')
+            break;
+        bzero(buf, 1024);
+        fgets(buf, 1024, stdin);
+        n = sendto(sock, buf, 1024, 0, (struct sockaddr *)&client, fromlen);
+        if (buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't')
+            break;
+        if (n < 0)
             error("sendto");
+        bzero(buf, 1024);
     }
     return 0;
 }
