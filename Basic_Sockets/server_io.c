@@ -98,11 +98,11 @@ int main(int argc,char *argv[])
 		{
 			
 			char buffer[1024];
-			char name[5];
+			char name[7];
 			fgets(buffer,1024,stdin);
 			printf("Enter the name of the client::");
-			fflush(stdin);
-			fgets(name,6,stdin);
+			fgets(name,7,stdin);
+			name[5] = name[6] = '\0';
 			int index = compare(names,name,n);
 			if(index == -1)
 			{
