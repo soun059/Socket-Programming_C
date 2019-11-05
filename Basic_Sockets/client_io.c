@@ -29,7 +29,8 @@ int main(int argc,char *argv[])
 		printf("failed to connect\n");
 		return 0;
 	}	
-	recv(network_socket,buffer,sizeof(buffer),0);
+	int y =recv(network_socket,buffer,sizeof(buffer),0);
+	buffer[y-1] = '\0';
 	printf("%s",buffer);
 	char name[8];
 	fgets(name,8,stdin);
