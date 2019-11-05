@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<arpa/inet.h>
+#include<netinet/ip.h>
+#include<netinet/in.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<string.h>
+#include<unistd.h>
+
+int main(int argc,char *argv[])
+{
+	if(argc<2)
+	{
+		printf("less number of arguments are given\n");
+		return 0;
+	}
+	int network_socket;
+	network_socket = socket(AF_INET,SOCK_STREAM,0);
+	struct sockaddr_in server;
+	server.sin_addr.s_addr = inet_addr(argv[1]);
+	server.sin_family = AF_INET;
+	server.sin_port = htons(atoi(argv[2]));
+	char buffer[1024];
+	if(connect(network_socket,(struct sockaddr*)&server,sizeof(server))<0)
+	{
+		printf("failed to connect\n");
+		return 0;
+	}	
+	while(1)
+	{
+		memset(buffer,'\0',1024);
+		int n = recv(network_socket,buffer,1024,0);
+		if(n == 0)
+			break;
+		if(buffer[0] == 'e' && buffer[1] == 'x' && buffer[2] == 'i' && buffer[3] == 't')
+		{
+			break;
+		}
+		else if(n>0)
+		{
+			printf("Received data from client::%s\n",buffer);
+		}
+		memset(buffer,'\0',1024);
+		printf("Enter a message for the server::");
+		fgets(buffer,1024,stdin);
+		n = send(network_socket,buffer,1024,0);
+		if(n>0)
+				printf("Sent successfully\n");
+		if(buffer[0] == 'e' && buffer[1] == 'x' && buffer[2] == 'i' && buffer[3] == 't')
+		{
+				break;
+		}
+	}
+		close(network_socket);
+}
